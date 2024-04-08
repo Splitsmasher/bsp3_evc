@@ -4,6 +4,7 @@
 
 from typing import Tuple
 
+import PIL.TiffTags
 import numpy as np
 from PIL import Image
 from PIL.TiffTags import TAGS
@@ -21,13 +22,22 @@ def evc_read_file_info(filename: str) -> Tuple[int, Tuple]:
       asShotNeutral ... neutral white value, which is stored in the image"""
 
     ### STUDENT CODE
-    #TODO:  Implement this function.
-    #HINT: 	'PIL.TiffTags.TAGS' might be useful.
-    #NOTE:  The following two lines can be removed. They prevent the
-    #       framework from crashing.
 
-    blackLevel = 0
-    asShotNeutral = [1, 1, 1]
+    image = Image.open(filename)
+
+    tiffinfo = image.getexif()
+
+    blackLevel = tiffinfo.get(50714)
+    asShotNeutral = tiffinfo.get(50728)
+
+    """
+    Would also work but it was said to do it without a loop and in my mind the for in the curlybrackets is a loop
+    
+    meta_dict = {TAGS[key]: image.tag[key] for key in image.tag_v2}
+    blackLevel2 = meta_dict['BlackLevel']
+    asShotNeutral2 = meta_dict['AsShotNeutral']
+    """
+
     ### END STUDENT CODE
     
     

@@ -25,18 +25,21 @@ def evc_read_file_info(filename: str) -> Tuple[int, Tuple]:
 
     image = Image.open(filename)
 
+    """
+    Version without a "loop"
     tiffinfo = image.getexif()
 
     blackLevel = tiffinfo.get(50714)
     asShotNeutral = tiffinfo.get(50728)
+    """
+    """
+    Does this for ... in count as loop?
+    """
 
-    """
-    Would also work but it was said to do it without a loop and in my mind the for in the curlybrackets is a loop
-    
     meta_dict = {TAGS[key]: image.tag[key] for key in image.tag_v2}
-    blackLevel2 = meta_dict['BlackLevel']
-    asShotNeutral2 = meta_dict['AsShotNeutral']
-    """
+    blackLevel: int = meta_dict['BlackLevel'][0]
+    asShotNeutral: Tuple = meta_dict['AsShotNeutral']
+
 
     ### END STUDENT CODE
     
@@ -59,11 +62,10 @@ def evc_transform_colors(input_image: np.ndarray, blackLevel: float) -> np.ndarr
                         be 0."""
 
     ### STUDENT CODE
-    #TODO:  Implement this function.
-    #NOTE:  The following line can be removed. It prevents the framework
-    #       from crashing.
 
-    result = np.zeros(input_image.shape)
+    array = input_image - blackLevel
+    result = array.astype(np.float32) / (65535 - blackLevel)
+
     ### END STUDENT CODE
     
     

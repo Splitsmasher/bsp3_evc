@@ -23,17 +23,31 @@ def evc_demosaic_pattern(input_image: np.ndarray, pattern = 'RGGB') -> Tuple[np.
       B             ... blue channel of the image (without interpolation)"""
 
     ### STUDENT CODE
-    # TODO: Implement this function.
-    # HINT: For this task the "start:end:step" array slicing might be useful.
-    #       Find the correct Bayer-Pattern depending on your dataset.
-    #       No interpolation needs to be performed here!
-
-	# NOTE: The following three lines can be removed. They prevent the framework
-    #       from crashing.
 
     R = np.zeros(input_image.shape)
     G = np.zeros(input_image.shape)
     B = np.zeros(input_image.shape)
+    if pattern == 'RGGB':
+        R[::2, ::2] = input_image[::2, ::2]
+        G[::2, 1::2]= input_image[::2, 1::2]
+        G[1::2, ::2]= input_image[1::2, ::2]
+        B[1::2, 1::2] = input_image[1::2, 1::2]
+    if pattern == 'BGGR':
+        B[::2, ::2] = input_image[::2, ::2]
+        G[::2, 1::2] = input_image[::2, 1::2]
+        G[1::2, ::2] = input_image[1::2, ::2]
+        R[1::2, 1::2] = input_image[1::2, 1::2]
+    if pattern == 'GRBG':
+        G[::2, ::2] = input_image[::2, ::2]
+        R[::2, 1::2] = input_image[::2, 1::2]
+        B[1::2, ::2] = input_image[1::2, ::2]
+        G[1::2, 1::2] = input_image[1::2, 1::2]
+    if pattern == 'GBRG':
+        G[::2, ::2] = input_image[::2, ::2]
+        B[::2, 1::2] = input_image[::2, 1::2]
+        R[1::2, ::2] = input_image[1::2, ::2]
+        G[1::2, 1::2] = input_image[1::2, 1::2]
+
     ### END STUDENT CODE
 
 

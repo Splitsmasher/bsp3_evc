@@ -70,13 +70,11 @@ def evc_transform_neutral(R: np.ndarray, G: np.ndarray, B: np.ndarray, asShotNeu
       B_trans       ... blue channel of the image (changed by neutral white value)"""
 
     ### STUDENT CODE
-    # TODO: Implement this function.
-	# NOTE: The following three lines can be removed. They prevent the framework
-    #       from crashing.
 
-    R_trans = np.zeros(R.shape)
-    G_trans = np.zeros(G.shape)
-    B_trans = np.zeros(B.shape)
+    R_trans = R / asShotNeutral[0]
+    G_trans = G / asShotNeutral[1]
+    B_trans = B / asShotNeutral[2]
+
     ### END STUDENT CODE
 
 

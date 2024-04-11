@@ -23,10 +23,11 @@ def evc_compute_brightness(input_image: np.ndarray) -> np.ndarray:
       brightness  ... brightness of the image, matrix of dimension (n, m)"""
 
     ### STUDENT CODE
-    # TODO: Implement this function.
-    # HINT: The function 'rgb2gray' might be useful.
 
-    brightness = np.ones(input_image.shape)
+    normalized = input_image / np.max(input_image)
+    brightness = rgb2gray(normalized)
+    brightness *= np.max(input_image)
+
     ### END STUDENT CODE
 
 
@@ -45,12 +46,13 @@ def evc_compute_chromaticity(input_image: np.ndarray, brightness: np.ndarray) ->
       chromaticity  ... chromaticity of the image, dimension (n, m, 3)"""
 
     ### STUDENT CODE
-    # TODO: Implement this function.
-    # HINT: The function 'np.dstack' might be useful.
-    # NOTE: The following line can be removed. It prevents the framework
-    #       from crashing.
 
-    chromaticity = np.zeros(input_image.shape)
+    chromaticity = np.copy(input_image)
+
+    chromaticity[:, :, 0] /= brightness
+    chromaticity[:, :, 1] /= brightness
+    chromaticity[:, :, 2] /= brightness
+
     ### END STUDENT CODE
 
 
@@ -69,12 +71,10 @@ def evc_gamma_correct(input_image: np.ndarray, gamma: float) -> np.ndarray:
       corrected   ... image after gamma correction"""
 
     ### STUDENT CODE
-    # TODO: Implement this function.
-    # HINT: Make sure the program does not crash because of a division by 0
-    # NOTE: The following line can be removed. It prevents the framework
-    #       from crashing.
+    if gamma < 0.0000000001:
+        gamma = 0.0000000001
 
-    corrected = np.zeros(input_image.shape)
+    corrected = input_image * (gamma**(-1))
     ### END STUDENT CODE
 
 
@@ -92,11 +92,12 @@ def evc_reconstruct(brightness_corrected: np.ndarray, chromaticity) -> np.ndarra
       result                ... reconstructed image"""
 
     ### STUDENT CODE
-    # TODO: Implement this function.
-    # NOTE:  The following line can be removed. It prevents the framework
-    #       from crashing.
+    result = np.copy(chromaticity)
 
-    result = np.zeros(brightness_corrected.shape)
+    result[:, :, 0] *= brightness_corrected
+    result[:, :, 1] *= brightness_corrected
+    result[:, :, 2] *= brightness_corrected
+
     ### END STUDENT CODE
 
 

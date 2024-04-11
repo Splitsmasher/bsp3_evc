@@ -95,14 +95,13 @@ def evc_interpolate(red : np.ndarray, green : np.ndarray, blue : np.ndarray) -> 
         B_inter     ... blue channel of the image (without missing values)"""
 
     ### STUDENT CODE
-    # TODO: Implement this function.
-	# HINT: The function 'scipy.ndimage.correlate' might be useful.
-	# NOTE: The following three lines can be removed. They prevent the framework
-    #       from crashing.
+    filterGreen = np.array([[0.0, 0.25, 0.0], [0.25, 1.0, 0.25], [0.0, 0.25, 0.0]])
+    filterBlueRed = np.array([[0.25, 0.5, 0.25], [0.5, 1.0, 0.5], [0.25, 0.5, 0.25]])
+    #https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=7af2ccdb66af0efec7b9db14c41c310c44ac2a84 page 13
 
-    R_inter = np.zeros(np.shape(red))
-    G_inter = np.zeros(np.shape(green))
-    B_inter = np.zeros(np.shape(blue))
+    R_inter = scipy.ndimage.correlate(red, filterBlueRed, mode='constant')
+    G_inter = scipy.ndimage.correlate(green, filterGreen, mode='constant')
+    B_inter = scipy.ndimage.correlate(blue, filterBlueRed, mode='constant')
     ### END STUDENT CODE
 
 
@@ -122,12 +121,7 @@ def evc_concat(R: np.ndarray, G: np.ndarray, B: np.ndarray) -> np.ndarray:
       result        ... resulting image"""
 
     ### STUDENT CODE
-    # TODO: Implement this function.
-    # HINT: The function 'np.stack' might be useful.
-    # NOTE: The following line can be removed. It prevents the framework
-    #       from crashing.
-
-    result = np.zeros([*R.shape[:2], 3])
+    result = np.stack([R, G, B], axis=2)
     ### END STUDENT CODE
 
 

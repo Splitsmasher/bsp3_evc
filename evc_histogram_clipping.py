@@ -6,6 +6,7 @@ from typing import Tuple
 
 import numpy as np
 
+
 def evc_prepare_histogram_range(input_image: np.ndarray, low: float, high: float) -> Tuple[float, float]:
     """evc_prepare_histogram_range first calculates the new upper- and lower-
     bounds. During the normalization, those two values are then mapped to [0,1].
@@ -23,15 +24,18 @@ def evc_prepare_histogram_range(input_image: np.ndarray, low: float, high: float
       newHigh       ... new white value"""
 
     ### STUDENT CODE
-    # TODO:	Implement this function.
-    # NOTE: The following two lines can be removed. They prevent the
-    #       framework from crashing.
+    imageMax = np.max(input_image)
 
-    newLow = low
-    newHigh = high
+    if imageMax < high:
+        newHigh = imageMax
+    else:
+        newHigh = high
+    if low < 0:
+        newLow = 0
+    else:
+        newLow = low
     ### END STUDENT CODE
-    
-    
+
     return newLow, newHigh
 
 
@@ -48,16 +52,11 @@ def evc_transform_histogram(input_image: np.ndarray, newLow: float, newHigh: flo
         result		... image after the histogram normalization"""
 
     ### STUDENT CODE
-    # TODO:	Implement this function.
-    # HINT: If the current white value is smaller than the maximum intensity
-    #       of the image, this function will create values larger than 1.
-	# NOTE: The following line can be removed. It prevents the framework
-    #       from crashing.
 
-    result = np.zeros(input_image.shape)
+    result = input_image * ((input_image - newLow) / (newHigh - newLow))
+
     ### END STUDENT CODE
 
-    
     return result
 
 
@@ -72,12 +71,9 @@ def evc_clip_histogram(input_image: np.ndarray) -> np.ndarray:
       result		... image after the clipping operation"""
 
     ### STUDENT CODE
-    # TODO:	Implement this function.
-	# NOTE: The following line can be removed. It prevents the framework
-    #       from crashing.
 
-    result = np.zeros(input_image.shape)
+    result = np.where(input_image < 0., 0., input_image)
+    result = np.where(result > 1., 1., result)
     ### END STUDENT CODE
 
-    
     return result
